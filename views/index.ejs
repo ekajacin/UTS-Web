@@ -275,8 +275,10 @@
                     "
                   ></div>
                 </div>
-                <div class="products-text">Sofa Ternyaman</div>
-                <div class="products-price">$1,409</div>
+               <% daftarProduct.forEach((item)=>{%>
+               <div class="products-text"><%= item.name %> </div>
+                <div class="products-price">$<%= item.price %> </div>
+               <% }); %>   
               </a>
             </div>
             <div
