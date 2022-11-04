@@ -5,7 +5,7 @@ const Pool = require('pg').Pool;
 const pool = new Pool({
     user : 'postgres',
     host : 'localhost',
-    database : 'warunginaja',
+    database : 'warunginaja1',
     password : 'admin',
     port : 5432,
 });
@@ -14,6 +14,7 @@ app.use(express.static('images'));
 app.use(express.static('script'));
 app.use(express.static('vendor'));
 app.use(express.urlencoded({extended:false}));
+
 
 app.get('/',function(req,res){
     pool.query('select*from product', function(error,result){
@@ -86,22 +87,24 @@ app.get('/dashTrans', function(req,res){
     res.render('dashboard-transactions.ejs');
 });
 app.post('/tambah', function(req,res){
-    const namaProduct = req.body.storeName;
-    const hargaProduct = req.body.price;
-    const detailProduct = req.body.desc;
-    const namaOwner = req.body.owner;
-
+    let data = {
+        name : req.body.storeName,
+        harga : req.body.price,
+        detail : req.body.description,
+        namaOwner : req.body.owner,
+    }
     pool.query(
-        'insert into product(name) values($1)',[namaProduct],
-        'insert into product(price) values($2)',[hargaProduct],
-        'insert into product(desc1) values($3)',[detailProduct],
-        'insert into product(owner) values($4)',[namaOwner],
+        'insert into product(name,price,desc1,owner) values ($1)',[data.name, data.harga, data.detail, data.namaOwner],
     function (error,results){
         if (error) {
             throw error;
         }
         res.redirect('/dashProducts');
     })
+    console.log(data.name);
+    console.log(data.harga);
+    console.log(data.detail);
+    console.log(data.namaOwner);
 });
 app.listen(8000, function hostname() {
     console.log('server running on port 8000');
